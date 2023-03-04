@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Générer un QrCode
+{% endblock %}
+
+{% block body %}
+	
+	<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+
+	<div class="container" style="height:400px">
+		<h1 class="mt-5">Générer un QrCode</h1>
+		<div class="row h-100 pb-5">
+			<div class="col-md-6 h-100 pt-5 mb-4">
+				{{ form_start(form) }}
+				{{ form_row(form.name, {'attr': {'class': 'form-control w-75', 'placeholder': 'Lien url'}}) }}
+                <div class="mt-4 mb-4">
+                    <div class="g-recaptcha" data-sitekey="6LcWYoIiAAAAAGJGR-OvySiJfZDVetQTHEHxQcN6"></div>
+                </div>
+				<button type="submit" class="btn btn-success btn-block w-75">Générer mon QrCode</button>
+				{{ form_end(form) }}
+
+				<p class="mt-5">Il vous suffit de saisir l'URL dans le champ de saisie, <br>le Qr Code apparaîtera dans la case ci-contre<br>
+					Il ne vous restera plus qu'à télécharger votre code QR-code</p>
+			</div>
+			<div class="col-md-6 border bg-fade bg-gradient border-radius box-shadow text-center pb-5">
+				<p class="text-center pt-4">Ici votre Qr-Code</p>
+				<hr>
+				{% if qrCode %}
+					<img src="{{ qrCode }}" alt="qr-code">
+					<br/>
+					<a href="{{qrCode}}" download="index.png" class="btn btn-info mt-4">Télécharger l'image</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
