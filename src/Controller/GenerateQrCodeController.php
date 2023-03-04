@@ -19,10 +19,23 @@ class GenerateQrCodeController extends AbstractController
         $qrCode = null;
         $form = $this->createForm(GenerateQrCodeType::class, null);
         $form->handleRequest($request);
+        $oneMore = false;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $qrCode = $qrcodeService->qrcode($data['name']);
+            $oneMore = true;
+        }
+
+        //si nombreQR.txt n'existe pas on le crée.
+        if (!file_exists('nombreQR.txt')) {
+            file_put_contents('nombreQR.txt', "0");
+        }
+        //si on a généré compteur + 1
+        if ($oneMore == true) {
+            $fo = fopen('nombreQR.txt', 'rb');
+            $firstLine = intval(fgets($fo));
+            file_put_contents('nombreQR.txt', $firstLine + 1);
         }
 
         return $this->render('generate_qr_code/index.html.twig', [
