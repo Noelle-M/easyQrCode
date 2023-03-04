@@ -17,13 +17,17 @@ class GenerateQrCodeController extends AbstractController
     public function index(Request $request, QrcodeService $qrcodeService): Response
     {
         $qrCode = null;
+
+        $numUnique = null;
         $form = $this->createForm(GenerateQrCodeType::class, null);
         $form->handleRequest($request);
         $oneMore = false;
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $qrCode = $qrcodeService->qrcode($data['name']);
+            $numUnique = $data['name'];
             $oneMore = true;
         }
 
@@ -40,7 +44,8 @@ class GenerateQrCodeController extends AbstractController
 
         return $this->render('generate_qr_code/index.html.twig', [
             'form' => $form->createView(),
-            'qrCode' => $qrCode
+            'qrCode' => $qrCode,
+            'numUnique' => $numUnique,
         ]);
     }
 }
